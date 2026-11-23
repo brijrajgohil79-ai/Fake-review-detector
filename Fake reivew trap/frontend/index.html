@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fake Review Trap - AI Product Review Authenticity Detector</title>
+  <meta name="description"
+    content="Detect whether e-commerce product reviews are genuine, suspicious, or fabricated using hybrid linguistic rules and TF-IDF Machine Learning." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Ambient Background Glow Orbs -->
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="logo-group">
+        <div class="logo-scanner" aria-hidden="true">
+          <div class="logo-ping"></div>
+          <div class="logo-icon-bg">🛡️</div>
+        </div>
+        <div class="brand-text">
+          <h1>Fake Review Trap</h1>
+          <div class="brand-badge">
+            <span class="pulse-dot"></span>
+            <span>AI Authenticity Radar &bull; Hybrid Detection Active</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="Toggle Dark Mode">
+          <span id="themeIcon">🌙</span>
+          <span id="themeText">Dark Mode</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <!-- Input Card -->
+      <section class="card" aria-labelledby="inputCardTitle">
+        <div class="card-header-group">
+          <h2 id="inputCardTitle" class="card-title">🔍 Inspect Product Review</h2>
+          <p class="card-subtitle">Paste a customer review below to uncover fabricated hype, bot templates, rating
+            conflicts, and promotional spam traps.</p>
+        </div>
+
+        <!-- Quick Test Samples -->
+        <div class="samples-bar">
+          <div class="samples-header-row">
+            <span class="samples-label">⚡ Quick Test Presets:</span>
+            <span style="font-size: 0.775rem; color: var(--text-muted);">Click any sample to auto-fill</span>
+          </div>
+          <div class="samples-buttons">
+            <button type="button" class="sample-chip" data-sample="fake-hype">
+              <span>🚨</span>
+              <span><strong>Hype & ALL CAPS</strong><br><small style="color:var(--fake-color);">Fake</small></span>
+            </button>
+            <button type="button" class="sample-chip" data-sample="fake-promo">
+              <span>🔗</span>
+              <span><strong>Promo & Links</strong><br><small style="color:var(--fake-color);">Fake</small></span>
+            </button>
+            <button type="button" class="sample-chip" data-sample="fake-mismatch">
+              <span>⚡</span>
+              <span><strong>Rating Conflict</strong><br><small style="color:var(--suspicious-color);">Bot
+                  Mismatch</small></span>
+            </button>
+            <button type="button" class="sample-chip" data-sample="suspicious-repeat">
+              <span>⚠️</span>
+              <span><strong>Repetitive Spam</strong><br><small
+                  style="color:var(--suspicious-color);">Suspicious</small></span>
+            </button>
+            <button type="button" class="sample-chip" data-sample="genuine-detailed">
+              <span>✅</span>
+              <span><strong>Balanced & Detailed</strong><br><small
+                  style="color:var(--genuine-color);">Genuine</small></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form id="analyzeForm" novalidate>
+          <div class="form-group">
+            <div class="textarea-toolbar">
+              <label for="reviewInput" class="form-label" style="font-weight: 700; font-size: 0.95rem;">
+                Customer Review Text <span style="color: var(--fake-color);">*</span>
+              </label>
+              <div class="toolbar-actions">
+                <button type="button" id="pasteBtn" class="tool-btn" title="Paste text from clipboard">📋 Paste</button>
+                <button type="button" id="clearTextBtn" class="tool-btn" title="Clear review text">✕ Clear</button>
+              </div>
+            </div>
+
+            <div class="textarea-container">
+              <textarea id="reviewInput" name="review"
+                placeholder="Paste the customer review here (e.g. 'I bought this mechanical keyboard 3 weeks ago. The tactile switches feel great and responsive, though the USB cable is slightly stiff...')"
+                maxlength="5000" required></textarea>
+            </div>
+
+            <div class="textarea-footer">
+              <span id="readingTime">⏱️ ~0 sec read</span>
+              <div class="char-counter">
+                <span id="charCount">0</span> / 5000 chars &bull; <span id="wordCount">0</span> words
+              </div>
+            </div>
+          </div>
+
+          <!-- Star Rating Selector -->
+          <div class="rating-section">
+            <div class="rating-info">
+              <span class="rating-title">Associated Star Rating (Optional)</span>
+              <span class="rating-desc">Helps detect bot rating-sentiment mismatches (e.g. 1 star with glowing
+                praise)</span>
+            </div>
+            <div class="star-rating-wrapper">
+              <div class="star-rating" id="starRatingContainer" role="radiogroup" aria-label="Star Rating">
+                <button type="button" class="star-btn" data-value="1" aria-label="1 star">★</button>
+                <button type="button" class="star-btn" data-value="2" aria-label="2 stars">★</button>
+                <button type="button" class="star-btn" data-value="3" aria-label="3 stars">★</button>
+                <button type="button" class="star-btn" data-value="4" aria-label="4 stars">★</button>
+                <button type="button" class="star-btn" data-value="5" aria-label="5 stars">★</button>
+              </div>
+              <span id="starRatingLabel" class="star-label">No rating</span>
+              <button type="button" id="clearRatingBtn" class="clear-rating-btn" style="display: none;">Reset</button>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="button-row">
+            <button type="submit" id="submitBtn" class="btn-primary">
+              <span id="btnIcon">⚡</span>
+              <span id="btnText">Analyze Review Authenticity</span>
+              <span id="btnSpinner" class="spinner" style="display: none;"></span>
+            </button>
+            <button type="button" id="resetBtn" class="btn-secondary">Reset All</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Results Hero Card -->
+      <section id="resultsSection" class="card" aria-live="polite">
+        <div class="card-header-group" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 class="card-title">📊 Authenticity Audit Report</h2>
+            <p class="card-subtitle">Real-time breakdown based on multi-vector linguistic heuristic rules & ML
+              classification.</p>
+          </div>
+          <button type="button" id="copyReportBtn" class="tool-btn" style="padding: 0.5rem 0.9rem;"
+            title="Copy summary report">
+            📋 Copy Report
+          </button>
+        </div>
+
+        <div class="results-hero-grid">
+          <!-- Radial Gauge Speedometer -->
+          <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 200 200">
+              <circle class="gauge-track" cx="100" cy="100" r="90"></circle>
+              <circle id="gaugeFill" class="gauge-fill gauge-genuine" cx="100" cy="100" r="90"></circle>
+            </svg>
+            <div class="gauge-content">
+              <div id="gaugeScore" class="gauge-score">0</div>
+              <div class="gauge-unit">RISK SCORE</div>
+              <div id="gaugeRiskTag" class="gauge-risk-tag" style="color: var(--genuine-color);">LOW RISK</div>
+            </div>
+          </div>
+
+          <!-- Hero Verdict Info -->
+          <div class="hero-verdict-info">
+            <div id="verdictBadge" class="verdict-badge badge-genuine">
+              <span id="verdictIcon">🛡️</span>
+              <span id="verdictText">Genuine Review</span>
+            </div>
+
+            <p id="verdictSummary" class="verdict-summary-text">
+              The review text displays natural vocabulary variation, balanced experience sentiment, and organic product
+              characteristics.
+            </p>
+
+            <!-- Linear Meter -->
+            <div class="meter-container">
+              <div class="meter-labels">
+                <span>Genuine (0-34)</span>
+                <span>Suspicious (35-64)</span>
+                <span>Fake (65-100)</span>
+              </div>
+              <div class="meter-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                <div id="meterFill" class="meter-fill meter-genuine"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Breakdown Bars -->
+        <div class="breakdown-section">
+          <div class="breakdown-title">Diagnostic Category Breakdown:</div>
+          <div class="breakdown-grid">
+            <div class="breakdown-card">
+              <div class="breakdown-top">
+                <span>Caps & Punctuation</span>
+                <span id="barScoreCaps">0%</span>
+              </div>
+              <div class="mini-bar-track">
+                <div id="miniBarCaps" class="mini-bar-fill meter-genuine" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-card">
+              <div class="breakdown-top">
+                <span>Hype & Bot Clichés</span>
+                <span id="barScoreHype">0%</span>
+              </div>
+              <div class="mini-bar-track">
+                <div id="miniBarHype" class="mini-bar-fill meter-genuine" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-card">
+              <div class="breakdown-top">
+                <span>Repetition & Quality</span>
+                <span id="barScoreRepetition">0%</span>
+              </div>
+              <div class="mini-bar-track">
+                <div id="miniBarRepetition" class="mini-bar-fill meter-genuine" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-card">
+              <div class="breakdown-top">
+                <span>Promotional Spam</span>
+                <span id="barScorePromo">0%</span>
+              </div>
+              <div class="mini-bar-track">
+                <div id="miniBarPromo" class="mini-bar-fill meter-genuine" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="breakdown-card">
+              <div class="breakdown-top">
+                <span>Rating Consistency</span>
+                <span id="barScoreRating">Aligned</span>
+              </div>
+              <div class="mini-bar-track">
+                <div id="miniBarRating" class="mini-bar-fill meter-genuine" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detected Flags & Reasons -->
+        <div class="reasons-container">
+          <h3 class="reasons-title">🚩 Detected Signals & Observations:</h3>
+          <ul id="reasonsList" class="reasons-list">
+            <!-- Dynamically populated -->
+          </ul>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div id="metricWords" class="metric-number">0</div>
+            <div class="metric-title">Words</div>
+          </div>
+          <div class="metric-box">
+            <div id="metricCaps" class="metric-number">0%</div>
+            <div class="metric-title">Caps Ratio</div>
+          </div>
+          <div class="metric-box">
+            <div id="metricExclamations" class="metric-number">0</div>
+            <div class="metric-title">Exclamations</div>
+          </div>
+          <div class="metric-box">
+            <div id="metricPolarity" class="metric-number">0.0</div>
+            <div class="metric-title">Polarity</div>
+          </div>
+          <div class="metric-box">
+            <div id="metricDiversity" class="metric-number">0%</div>
+            <div class="metric-title">Lexical Diversity</div>
+          </div>
+          <div class="metric-box">
+            <div id="metricEngine" class="metric-number" style="font-size: 1.05rem; font-weight: 700;">Hybrid</div>
+            <div class="metric-title">Detection Model</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- History Section -->
+      <section class="card history-section" aria-labelledby="historyCardTitle">
+        <div class="history-header">
+          <div>
+            <h2 id="historyCardTitle" class="card-title">🕒 Analysis History</h2>
+            <p class="card-subtitle" style="margin-top: 0.2rem;">Last 20 evaluated product reviews saved in SQLite</p>
+          </div>
+
+          <div class="history-toolbar">
+            <div class="search-input-wrapper">
+              <span class="search-icon">🔍</span>
+              <input type="text" id="historySearchInput" class="search-input" placeholder="Search reviews..."
+                aria-label="Search past reviews" />
+            </div>
+
+            <div class="history-filter-tabs">
+              <button type="button" class="filter-tab active" data-filter="all">All</button>
+              <button type="button" class="filter-tab" data-filter="Genuine">Genuine</button>
+              <button type="button" class="filter-tab" data-filter="Suspicious">Suspicious</button>
+              <button type="button" class="filter-tab" data-filter="Fake">Fake</button>
+            </div>
+
+            <span id="historyCountBadge" class="history-count-badge"
+              style="background: var(--primary-light); color: var(--primary); font-size: 0.825rem; font-weight: 700; padding: 0.35rem 0.75rem; border-radius: var(--radius-full);">0
+              saved</span>
+
+            <button type="button" id="exportHistoryBtn" class="btn-secondary"
+              style="padding: 0.45rem 0.8rem; font-size: 0.825rem;" title="Export history to CSV">
+              📥 CSV
+            </button>
+            <button type="button" id="refreshHistoryBtn" class="btn-secondary"
+              style="padding: 0.45rem 0.8rem; font-size: 0.825rem;" title="Refresh History">
+              🔄 Refresh
+            </button>
+            <button type="button" id="clearHistoryBtn" class="btn-secondary"
+              style="padding: 0.45rem 0.8rem; font-size: 0.825rem; color: var(--fake-color);" title="Clear all history">
+              🗑️ Clear
+            </button>
+          </div>
+        </div>
+
+        <div id="historyList" class="history-grid">
+          <div class="empty-history">Loading history...</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>Fake Review Trap &bull; Powered by Python Flask, SQLite, and Vanilla JS &bull; Clean Rule-Based & TF-IDF
+        Machine Learning</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" aria-live="assertive"></div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

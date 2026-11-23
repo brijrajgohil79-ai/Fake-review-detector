@@ -1,0 +1,37 @@
+[
+  {
+    "id": "sample-1-fake-hype",
+    "name": "Excessive Hype & All Caps (Fake)",
+    "description": "Uses full capitalization, multiple exclamation marks, and generic hype clichés.",
+    "rating": 5,
+    "review": "BEST PRODUCT EVER BUY NOW!!! MUST BUY DO NOT HESITATE TO BUY 10/10 FIVE STARS WORKS LIKE MAGIC LIFE CHANGER!!!"
+  },
+  {
+    "id": "sample-2-fake-promo",
+    "name": "Promotional Spam & Links (Fake)",
+    "description": "Contains external link, promotional coupon code, and contact information.",
+    "rating": 5,
+    "review": "Superb quality item! Don't miss out, use promo code DISCOUNT50 for 50% cashback on https://super-deals-shop.online or contact WhatsApp +1-555-0199 for bulk discounts!"
+  },
+  {
+    "id": "sample-3-rating-mismatch",
+    "name": "Rating-Sentiment Conflict (Fake/Bot Mistake)",
+    "description": "Gives a 1-star rating but writes an overly glowing, flawless positive review.",
+    "rating": 1,
+    "review": "This is hands down the most amazing, flawless, and wonderful product I have ever purchased. Absolute perfection in every detail and brilliant craftsmanship!"
+  },
+  {
+    "id": "sample-4-suspicious-repetition",
+    "name": "Repetitive Spam Pattern (Suspicious)",
+    "description": "Very brief with low vocabulary diversity and repetitive keywords.",
+    "rating": 5,
+    "review": "good good good product very nice nice nice good item fast fast delivery good"
+  },
+  {
+    "id": "sample-5-genuine-detailed",
+    "name": "Detailed & Balanced Experience (Genuine)",
+    "description": "Mentions concrete features, usage period, realistic minor flaws, and grounded evaluation.",
+    "rating": 4,
+    "review": "I have been using these wireless headphones daily for about 3 weeks. The sound quality is crisp and the bass is solid for this price point. Battery life comfortably lasts 28 hours on a single charge. However, the plastic ear cups can get slightly warm after 2 hours of continuous wear. Overall, very satisfied with this upgrade compared to my previous pair."
+  }
+]
